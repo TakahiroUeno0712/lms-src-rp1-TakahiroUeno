@@ -87,6 +87,12 @@
 			return hours + ':' + minutes;
 		}
 	</script>
+	
+	<th:block th:if="${notEnterCheck}">
+		<script th:inline="javascript">
+			alert(/*[[#{attendance.notEnterExists}]]*/ '');
+		</script>
+	</th:block>
 
 </body>
 </html>
