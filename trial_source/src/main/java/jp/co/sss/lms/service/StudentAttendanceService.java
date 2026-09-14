@@ -360,5 +360,11 @@ public class StudentAttendanceService {
 			return false;
 		}
 	}
-
+	
+	public void formatConversion(AttendanceForm attendanceForm) {
+		for (AttendanceForm form : attendanceList) {
+			
+		}
+	}
+	
 }
