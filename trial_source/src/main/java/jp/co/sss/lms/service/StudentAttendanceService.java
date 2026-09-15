@@ -336,6 +336,7 @@ public class StudentAttendanceService {
 	}
 
 	/**
+	 * Task.25 上野貴博
 	 * 過去日の未入力チェック
 	 * 
 	 * @return 未入力チェック結果
@@ -343,17 +344,19 @@ public class StudentAttendanceService {
 	 */
 	public Boolean notEnterCheck() throws ParseException {
 
-		//		現在日付を取得
+		// 現在日付を取得
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
+		// 形式変換
 		String cDate = sdf.format(date);
+		// String→Date
 		Date currentDate = sdf.parse(cDate);
 
-		//		未入力件数取得
+		// 未入力件数を取得
 		Integer notEnterCount = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
 				Constants.DB_FLG_FALSE, currentDate);
 
-		//		ポップアップ表示処理
+		// 件数が0より大きければtrue,そうでなければfalseを戻す
 		if (notEnterCount > 0) {
 			return true;
 		} else {
@@ -362,9 +365,9 @@ public class StudentAttendanceService {
 	}
 	
 	public void formatConversion(AttendanceForm attendanceForm) {
-		for (AttendanceForm form : attendanceList) {
-			
-		}
+//		for (AttendanceForm form : attendanceList) {
+//			
+//		}
 	}
 	
 }

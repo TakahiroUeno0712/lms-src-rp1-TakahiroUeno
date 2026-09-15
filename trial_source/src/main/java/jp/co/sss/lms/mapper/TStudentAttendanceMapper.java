@@ -66,6 +66,7 @@ public interface TStudentAttendanceMapper {
 	Boolean update(TStudentAttendance tStudentAttendance);
 
 	/**
+	 * Task.25 上野貴博
 	 * 勤怠情報（受講生入力）未入力チェック
 	 * 
 	 * @param lmsUserId

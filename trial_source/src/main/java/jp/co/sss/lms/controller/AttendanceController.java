@@ -31,6 +31,7 @@ public class AttendanceController {
 	private LoginUserDto loginUserDto;
 
 	/**
+	 * Task.25 上野貴博
 	 * 勤怠管理画面 初期表示
 	 * 
 	 * @param model
@@ -45,7 +46,7 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		
+		// Ⅱ．現在より過去に未入力が無いかチェック(サービスクラスで実施したものの呼出)
 		Boolean notEnterCheck = studentAttendanceService.notEnterCheck();
 		model.addAttribute("notEnterCheck", notEnterCheck);
 		return "attendance/detail";
