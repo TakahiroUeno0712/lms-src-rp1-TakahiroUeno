@@ -33,7 +33,6 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
-	 * @author 上野貴博 - Task.25
 	 * @param model
 	 * @return 勤怠管理画面
 	 * @throws ParseException
@@ -47,7 +46,7 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		// 上野貴博 - Task.25
-		// Ⅱ．現在より過去に未入力が無いかチェック(サービスクラスで実装したものの呼出)
+		// 現在より過去に未入力が無いかチェック(サービスクラスで実装したものの呼出)
 		Boolean notEnterCheck = studentAttendanceService.notEnterCheck();
 		model.addAttribute("notEnterCheck", notEnterCheck);
 		return "attendance/detail";
@@ -124,7 +123,6 @@ public class AttendanceController {
 	}
 
 	/**
-	 * Task.26 上野貴博
 	 * 勤怠情報直接変更画面 『更新』ボタン押下
 	 * 
 	 * @param attendanceForm
@@ -137,6 +135,8 @@ public class AttendanceController {
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
 
+		// 上野貴博 - Task.26
+		// 出退勤の「時」「分」をhh:mm形式に変換
 		studentAttendanceService.formatConversion(attendanceForm);
 
 		// 更新

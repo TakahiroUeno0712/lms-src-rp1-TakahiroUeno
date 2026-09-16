@@ -15,6 +15,9 @@ import jp.co.sss.lms.mapper.MSectionMapper;
  * 
  * @author 東京ITスクール
  */
+/**
+ * 
+ */
 @Component
 public class AttendanceUtil {
 
@@ -145,6 +148,96 @@ public class AttendanceUtil {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * 時間のプルダウンマップを生成
+	 * 
+	 * @author 上野貴博 - Task.26
+	 * @return 時間のプルダウンマップ
+	 */
+	public LinkedHashMap<Integer, String> getHourMap() {
+		
+		// 時間のプルダウンマップを生成
+		LinkedHashMap<Integer, String> hourMap = new LinkedHashMap<>();
+		
+		// 未選択用の空欄を設定
+		hourMap.put(null, "");
+		
+		// 00～23をマップに設定
+		for(int i = 0; i <= 23; i++) {
+			
+			// 2桁のフォーマットを適用
+			String hour = String.format("%02d", i);
+			hourMap.put(i, hour);
+		}
+		return hourMap;
+	}
+	
+	/**
+	 * 分のプルダウンマップを生成
+	 * 
+	 * @author 上野貴博 - Task.26
+	 * @return 分のプルダウンマップ
+	 */
+	public LinkedHashMap<Integer, String> getMinuteMap() {
+		
+		// 分のプルダウンマップを生成
+		LinkedHashMap<Integer, String> minuteMap = new LinkedHashMap<>();
+		
+		// 未選択用の空欄を設定
+		minuteMap.put(null, "");
+		
+		// 00～59をマップに設定
+		for(int i = 0; i <= 59; i++) {
+			
+			// 2桁のフォーマットを適用
+			String minute = String.format("%02d", i);
+			minuteMap.put(i, minute);
+		}
+		return minuteMap;
+	}
+	
+	/**
+	 * 出退勤時間から時間を取得
+	 * 
+	 * @author 上野貴博 - Task.26
+	 * @param trainingTime
+	 * @return 時間
+	 */
+	public Integer getHour(String trainingTime) {
+		
+		// 出退勤時間が未入力の場合はnullを返す
+		if(trainingTime == null || trainingTime.isEmpty()) {
+			return null;
+		}
+		
+		// 出退勤時間から時間部分を切り出す
+		String hour = trainingTime.substring(0, 2);
+		
+		// 時間を数値に変換して返す
+		return Integer.parseInt(hour);
+	}
+	
+	/**
+	 * 出退勤時間から分を取得
+	 * 
+	 * @author 上野貴博 - Task.26
+	 * @param trainingTime
+	 * @return 分
+	 */
+	public Integer getMinute(String trainingTime) {
+		
+		// 出退勤時間が未入力の場合はnullを返す
+		if(trainingTime == null || trainingTime.isEmpty()) {
+			return null;
+		}
+		
+		// 出退勤時間から分部分を切り出す
+		String minute = trainingTime.substring(3);
+		
+		// 分を数値に変換して返す
+		return Integer.parseInt(minute);
 	}
 
 }

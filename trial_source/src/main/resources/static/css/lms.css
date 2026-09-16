@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-table form, .ib {
+table form,
+.ib {
 	display: inline-block;
 }
 
@@ -113,7 +114,8 @@ div.tab-panel-div {
 /*------------------------------------------
    Sticky footer styles
 --------------------------------------------*/
-html, body {
+html,
+body {
 	height: 100%;
 }
 
@@ -124,7 +126,8 @@ html, body {
 	margin: 0 auto -60px;
 }
 
-#push, #footer {
+#push,
+#footer {
 	height: 60px;
 }
 
@@ -1215,7 +1218,7 @@ html, body {
 /* FONT-SIZE */
 .fs10 {
 	font-size: 83.3%;
-	
+
 }
 
 .fs11 {
@@ -1703,4 +1706,11 @@ html, body {
 .well.bs-component.subsidyCustom {
 	float: left;
 	width: 50%;
+
+}
+
+/* 上野貴博 - Task.26 */
+/* 出退勤時刻プルダウンの幅調整 */
+.time-control {
+	width: 45%;
 }
