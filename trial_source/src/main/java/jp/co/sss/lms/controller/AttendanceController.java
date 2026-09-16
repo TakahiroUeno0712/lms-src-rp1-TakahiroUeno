@@ -31,9 +31,9 @@ public class AttendanceController {
 	private LoginUserDto loginUserDto;
 
 	/**
-	 * Task.25 上野貴博
 	 * 勤怠管理画面 初期表示
 	 * 
+	 * @author 上野貴博 - Task.25
 	 * @param model
 	 * @return 勤怠管理画面
 	 * @throws ParseException
@@ -46,7 +46,8 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		// Ⅱ．現在より過去に未入力が無いかチェック(サービスクラスで実施したものの呼出)
+		// 上野貴博 - Task.25
+		// Ⅱ．現在より過去に未入力が無いかチェック(サービスクラスで実装したものの呼出)
 		Boolean notEnterCheck = studentAttendanceService.notEnterCheck();
 		model.addAttribute("notEnterCheck", notEnterCheck);
 		return "attendance/detail";
@@ -123,6 +124,7 @@ public class AttendanceController {
 	}
 
 	/**
+	 * Task.26 上野貴博
 	 * 勤怠情報直接変更画面 『更新』ボタン押下
 	 * 
 	 * @param attendanceForm
@@ -134,6 +136,8 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
+
+		studentAttendanceService.formatConversion(attendanceForm);
 
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
