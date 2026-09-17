@@ -363,7 +363,7 @@ public class StudentAttendanceService {
 		// 現在日時を取得
 		String date = dateUtil.getCurrentDateString("yyyy/MM/dd");
 
-		// String → Date
+		// 過去日判定用に時刻をリセットした現在日付をDate型に変換
 		Date currentDate = dateUtil.parse(date, "yyyy/MM/dd");
 
 		// 未入力件数を取得
