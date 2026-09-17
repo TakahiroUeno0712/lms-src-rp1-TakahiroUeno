@@ -362,18 +362,18 @@ public class StudentAttendanceService {
 	public Boolean notEnterCheck() throws ParseException {
 		
 		// 日付フォーマットパターンを設定
-		SimpleDateFormat format = new SimpleDateFormat();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		
 		// 現在日時を日付のみの文字列に変換
 		String date = format.format(new Date());
 		
 		// 時刻をリセットした日付をDate型に変換
-		Date currentDate = format.parse(date);
+		Date trainingDate = format.parse(date);
 
 		// 未入力件数を取得
 		// AttendanceStatusEnumから欠席のstatusを使用する
 		Integer notEnterCount = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
-				Constants.DB_FLG_FALSE, currentDate, AttendanceStatusEnum.ABSENT.code);
+				Constants.DB_FLG_FALSE, trainingDate, AttendanceStatusEnum.ABSENT.code);
 
 		// 未入力件数が0より大きければtrue,そうでなければfalseを戻す
 		if (notEnterCount > 0) {

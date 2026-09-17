@@ -115,7 +115,7 @@
 		AND
 		t_student_attendance.delete_flg = #{deleteFlg}
 		AND
-		t_student_attendance.training_date &lt; #{currentDate}
+		t_student_attendance.training_date &lt; #{trainingDate}
 		AND
 		t_student_attendance.status != #{absentStatus}
 		AND

@@ -76,6 +76,6 @@ public interface TStudentAttendanceMapper {
 	 * @return 未入力件数
 	 */
 	Integer notEnterCount(@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg,
-			@Param("currentDate") Date currentDate, @Param("absentStatus") Short absentStatus);
+			@Param("trainingDate") Date trainingDate, @Param("absentStatus") Short absentStatus);
 
 }
