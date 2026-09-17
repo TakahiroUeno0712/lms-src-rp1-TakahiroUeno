@@ -119,9 +119,9 @@
 		AND
 		t_student_attendance.status != #{absentStatus}
 		AND
-		(t_student_attendance.training_start_time = ' '
+		(t_student_attendance.training_start_time = ''
 		OR
-		t_student_attendance.training_end_time = ' '
+		t_student_attendance.training_end_time = ''
 		OR
 		t_student_attendance.training_start_time IS NULL
 		OR
