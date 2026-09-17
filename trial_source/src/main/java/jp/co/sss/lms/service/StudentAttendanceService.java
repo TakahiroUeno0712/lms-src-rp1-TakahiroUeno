@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -359,12 +360,15 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 	public Boolean notEnterCheck() throws ParseException {
-
-		// 現在日時を取得
-		String date = dateUtil.getCurrentDateString("yyyy/MM/dd");
-
-		// 過去日判定用に時刻をリセットした現在日付をDate型に変換
-		Date currentDate = dateUtil.parse(date, "yyyy/MM/dd");
+		
+		// 日付フォーマットパターンを設定
+		SimpleDateFormat format = new SimpleDateFormat();
+		
+		// 現在日時を日付のみの文字列に変換
+		String date = format.format(new Date());
+		
+		// 時刻をリセットした日付をDate型に変換
+		Date currentDate = format.parse(date);
 
 		// 未入力件数を取得
 		// AttendanceStatusEnumから欠席のstatusを使用する
