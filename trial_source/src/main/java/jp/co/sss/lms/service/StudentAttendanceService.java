@@ -2,6 +2,8 @@ package jp.co.sss.lms.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -16,6 +19,7 @@ import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
+import jp.co.sss.lms.mapper.MLmsUserMapper;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -33,6 +37,8 @@ import jp.co.sss.lms.util.TrainingTime;
 public class StudentAttendanceService {
 
 	@Autowired
+	private TrainingTime trainingTime;
+	@Autowired
 	private DateUtil dateUtil;
 	@Autowired
 	private AttendanceUtil attendanceUtil;
@@ -42,6 +48,8 @@ public class StudentAttendanceService {
 	private LoginUserUtil loginUserUtil;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private MLmsUserMapper mLmsUserMapper;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
 
@@ -360,13 +368,13 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 	public Boolean notEnterCheck() throws ParseException {
-		
+
 		// 日付フォーマットパターンを設定
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		
+
 		// 現在日時を日付のみの文字列に変換
 		String date = format.format(new Date());
-		
+
 		// 時刻をリセットした日付をDate型に変換
 		Date trainingDate = format.parse(date);
 
@@ -414,6 +422,90 @@ public class StudentAttendanceService {
 				// hh:mm形式に変更
 				String trainingEndTime = trainingEndTimeHour + ":" + trainingEndTimeMinute;
 				form.setTrainingEndTime(trainingEndTime);
+			}
+		}
+	}
+
+	/**
+	 * 勤務情報更新時の入力チェック
+	 * 
+	 * @author 上野貴博 - Task.27
+	 * @param attendanceForm
+	 * @param result
+	 */
+	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		
+		// 勤怠リストの件数分、チェックを行う
+		for (int i = 0; i < attendanceForm.getAttendanceList().size(); i++) {
+
+			// 勤怠リストを一件ずつformに入れる
+			DailyAttendanceForm form = attendanceForm.getAttendanceList().get(i);
+
+			// 備考が100文字を超える場合、エラーメッセージを追加
+			if (form.getNote() != null && form.getNote().length() > 100) {
+				result.rejectValue("attendanceList[" + i + "].note", "maxlength", new Object[] { "備考", "100" },
+						"{0}の長さが最大値({1})を超えています。");
+			}
+
+			// 出勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
+			if ((form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() == null) ||
+					(form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null)) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartTime", "input_invalid",
+						new Object[] { "出勤時間" },
+						"{0}が正しく入力されていません。");
+			}
+
+			// 退勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
+			if ((form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() == null) ||
+					(form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null)) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndTime", "input_invalid",
+						new Object[] { "退勤時間" },
+						"{0}が正しく入力されていません。");
+			}
+
+			// 出勤時間に入力なし、退勤時間に入力ありの場合、エラーメッセージを追加
+			if (form.getTrainingStartTime() == null && form.getTrainingEndTime() != null) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartTime", "attendance.punchInEmpty");
+			}
+
+			// 出勤時間>退勤時間の場合、エラーメッセージを追加
+			if (form.getTrainingStartTime() != null && form.getTrainingEndTime() != null) {
+				if (form.getTrainingStartTime().compareTo(form.getTrainingEndTime()) > 0) {
+					result.rejectValue("attendanceList[" + i + "].trainingEndTime", "attendance.trainingTimeRange",
+							new Object[] { "n" }, "退勤時刻[{0}]は出勤時刻[{0}]より後でなければいけません。");
+				}
+			}
+
+			// 中抜け時間が勤務時間を超える場合、エラーメッセージを追加
+			if (form.getTrainingStartTime() != null && form.getTrainingEndTime() != null) {
+				// 時間の文字列（"10:00" など）を LocalTime に変換
+				LocalTime trainingStartTime = LocalTime.parse(form.getTrainingStartTime());
+				LocalTime trainingEndTime = LocalTime.parse(form.getTrainingEndTime());
+
+				// 出勤から退勤までの「総勤務時間」を計算（分単位）
+				long totalWorkMinutes = Duration.between(trainingStartTime, trainingEndTime).toMinutes();
+
+				// 中抜け時間を取得（分単位）
+				Integer blankTime = form.getBlankTime();
+
+				// 中抜け時間が総勤務時間を超えているか判定
+				if (blankTime != null && blankTime > totalWorkMinutes) {
+					result.rejectValue("attendanceList[" + i + "].blankTime", "attendance.blankTimeError",
+							"中抜け時間が勤務時間を超えています。");
+				}
+			}
+			
+			// 入力チェックでエラーがある場合、画面表示用の各選択肢Mapを設定
+			if (result.hasErrors()) {
+				
+				// 中抜け時間の選択肢Mapを設定
+				attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+				
+				// 出退勤時間の「時」の選択肢Mapを設定
+				attendanceForm.setHourMap(attendanceUtil.getHourMap());
+				
+				// 出退勤時間の「分」の選択肢Mapを設定
+				attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
 			}
 		}
 	}

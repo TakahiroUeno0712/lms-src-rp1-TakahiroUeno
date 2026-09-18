@@ -138,7 +138,15 @@ public class AttendanceController {
 		// 上野貴博 - Task.26
 		// 出退勤の「時」「分」をhh:mm形式に変換
 		studentAttendanceService.formatConversion(attendanceForm);
+		
+		// 上野貴博 - Task.27
+		// 勤怠入力チェック
+		studentAttendanceService.updateInputCheck(attendanceForm, result);
+		if(result.hasErrors()) {
+			return "attendance/update";
+		}
 
+		// 上野貴博 - Task.26
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
