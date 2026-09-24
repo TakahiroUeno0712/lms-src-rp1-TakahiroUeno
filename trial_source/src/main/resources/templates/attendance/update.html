@@ -19,6 +19,14 @@
 		</th:block>
 	</th:block>
 
+	<!-- Task.27 - 上野貴博 -->
+	<!-- 入力チェックエラーメッセージ表示 -->
+	<div th:if="${errors != null}" class="error">
+		<ul>
+			<li th:each="error : ${errors}" th:text="${#messages.msgWithParams(error.code, error.arguments)}"></li>
+		</ul>
+	</div>
+
 	<div class="row">
 		<div class="bs-component col-sm-12">
 
@@ -59,7 +67,7 @@
 									<!-- 上野貴博 - Task.26 -->
 									<!-- 出勤時刻を「時」「分」に分割しプルダウンへ変更 -->
 									<div style="display: flex; justify-content: space-between;">
-										
+
 										<!-- 出勤時間(時)
 											th:field:attendanceListの現在行のtrainingStartTimeHourと紐づけ
 											th:each:hourMapからプルダウンの選択肢を生成 -->
@@ -70,9 +78,9 @@
 											<option th:each="hour: *{attendanceForm.hourMap}" th:value="*{hour.key}"
 												th:text="*{hour.value}"></option>
 										</select>
-										
+
 										<span>:</span>
-										
+
 										<!-- 出勤時間(分)
 											th:field:attendanceListの現在行のtrainingStartTimeMinuteと紐づけ
 											th:each:minuteMapからプルダウンの選択肢を生成 -->
@@ -91,7 +99,7 @@
 									<!-- 上野貴博 - Task.26 -->
 									<!-- 退勤時刻を「時」「分」に分割しプルダウンへ変更 -->
 									<div style="display: flex; justify-content: space-between;">
-										
+
 										<!-- 退勤時間(時)
 											th:field:attendanceListの現在行のtrainingEndTimeHourと紐づけ
 											th:each:hourMapからプルダウンの選択肢を生成 -->
@@ -102,9 +110,9 @@
 											<option th:each="hour: *{attendanceForm.hourMap}" th:value="*{hour.key}"
 												th:text="*{hour.value}"></option>
 										</select>
-										
+
 										<span>:</span>
-										
+
 										<!-- 出勤時間(分)
 											th:field:attendanceListの現在行のtrainingEndTimeMinuteと紐づけ
 											th:each:minuteMapからプルダウンの選択肢を生成 -->
@@ -143,9 +151,9 @@
 					<th:block th:if="${session.loginUserDto.role != '0001'}">
 						<input type="submit" value="戻る" name="indexCompany" class="btn btn-default" />
 					</th:block>
-					<input type="submit" value="更新" name="complete" class="btn btn-info" />
+					<input type="submit" value="更新" name="complete" class="btn btn-info"
+						onClick="return confirm('更新します。よろしいですか？')">
 				</div>
-
 			</form>
 		</div>
 	</div>

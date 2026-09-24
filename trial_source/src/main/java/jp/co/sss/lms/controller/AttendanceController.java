@@ -142,7 +142,10 @@ public class AttendanceController {
 		// 上野貴博 - Task.27
 		// 勤怠入力チェック
 		studentAttendanceService.updateInputCheck(attendanceForm, result);
+		
+		// 入力エラーがある場合、エラー情報を画面に渡す
 		if(result.hasErrors()) {
+			model.addAttribute("errors", result.getAllErrors());
 			return "attendance/update";
 		}
 

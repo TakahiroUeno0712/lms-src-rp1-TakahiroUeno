@@ -434,33 +434,31 @@ public class StudentAttendanceService {
 	 * @param result
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
-		
-		// 勤怠リストの件数分、チェックを行う
+
+		// 勤怠リストの件数分、入力チェックを行う
 		for (int i = 0; i < attendanceForm.getAttendanceList().size(); i++) {
 
-			// 勤怠リストを一件ずつformに入れる
+			// チェック対象の勤怠情報を一件ずつformに入れる
 			DailyAttendanceForm form = attendanceForm.getAttendanceList().get(i);
 
 			// 備考が100文字を超える場合、エラーメッセージを追加
 			if (form.getNote() != null && form.getNote().length() > 100) {
-				result.rejectValue("attendanceList[" + i + "].note", "maxlength", new Object[] { "備考", "100" },
-						"{0}の長さが最大値({1})を超えています。");
+				result.rejectValue("attendanceList[" + i + "].note", "maxlength",
+						new Object[] { "備考", "100" }, "{0}の長さが最大値({1})を超えています。");
 			}
 
 			// 出勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
 			if ((form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() == null) ||
 					(form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null)) {
-				result.rejectValue("attendanceList[" + i + "].trainingStartTime", "input_invalid",
-						new Object[] { "出勤時間" },
-						"{0}が正しく入力されていません。");
+				result.rejectValue("attendanceList[" + i + "].trainingStartTime", "input.invalid",
+						new Object[] { "出勤時間" }, "{0}が正しく入力されていません。");
 			}
 
 			// 退勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
 			if ((form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() == null) ||
 					(form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null)) {
-				result.rejectValue("attendanceList[" + i + "].trainingEndTime", "input_invalid",
-						new Object[] { "退勤時間" },
-						"{0}が正しく入力されていません。");
+				result.rejectValue("attendanceList[" + i + "].trainingEndTime", "input.invalid",
+						new Object[] { "退勤時間" }, "{0}が正しく入力されていません。");
 			}
 
 			// 出勤時間に入力なし、退勤時間に入力ありの場合、エラーメッセージを追加
@@ -472,12 +470,13 @@ public class StudentAttendanceService {
 			if (form.getTrainingStartTime() != null && form.getTrainingEndTime() != null) {
 				if (form.getTrainingStartTime().compareTo(form.getTrainingEndTime()) > 0) {
 					result.rejectValue("attendanceList[" + i + "].trainingEndTime", "attendance.trainingTimeRange",
-							new Object[] { "n" }, "退勤時刻[{0}]は出勤時刻[{0}]より後でなければいけません。");
+							new Object[] { i }, "退勤時刻[{0}]は出勤時刻[{0}]より後でなければいけません。");
 				}
 			}
 
 			// 中抜け時間が勤務時間を超える場合、エラーメッセージを追加
 			if (form.getTrainingStartTime() != null && form.getTrainingEndTime() != null) {
+
 				// 時間の文字列（"10:00" など）を LocalTime に変換
 				LocalTime trainingStartTime = LocalTime.parse(form.getTrainingStartTime());
 				LocalTime trainingEndTime = LocalTime.parse(form.getTrainingEndTime());
@@ -490,20 +489,19 @@ public class StudentAttendanceService {
 
 				// 中抜け時間が総勤務時間を超えているか判定
 				if (blankTime != null && blankTime > totalWorkMinutes) {
-					result.rejectValue("attendanceList[" + i + "].blankTime", "attendance.blankTimeError",
-							"中抜け時間が勤務時間を超えています。");
+					result.rejectValue("attendanceList[" + i + "].blankTime", "attendance.blankTimeError");
 				}
 			}
-			
+
 			// 入力チェックでエラーがある場合、画面表示用の各選択肢Mapを設定
 			if (result.hasErrors()) {
-				
+
 				// 中抜け時間の選択肢Mapを設定
 				attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
-				
+
 				// 出退勤時間の「時」の選択肢Mapを設定
 				attendanceForm.setHourMap(attendanceUtil.getHourMap());
-				
+
 				// 出退勤時間の「分」の選択肢Mapを設定
 				attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
 			}
