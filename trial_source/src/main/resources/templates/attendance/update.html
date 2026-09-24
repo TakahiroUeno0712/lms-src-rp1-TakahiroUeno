@@ -74,7 +74,8 @@
 										<select name class="form-control time-control"
 											errorstyleclass="form-control errorInput" property="trainingStartTimeHour"
 											indexed="true"
-											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeHour}">
+											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeHour}"
+											th:errorclass="errorInput">
 											<option th:each="hour: *{attendanceForm.hourMap}" th:value="*{hour.key}"
 												th:text="*{hour.value}"></option>
 										</select>
@@ -87,7 +88,8 @@
 										<select name class="form-control time-control"
 											errorstyleclass="form-control errorInput" property="trainingStartTimeMinute"
 											indexed="true"
-											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeMinute}">
+											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeMinute}"
+											th:errorclass="errorInput">
 											<option th:each="minute: *{attendanceForm.minuteMap}"
 												th:value="*{minute.key}" th:text="*{minute.value}"></option>
 										</select>
@@ -106,7 +108,8 @@
 										<select name class="form-control time-control"
 											errorstyleclass="form-control errorInput" property="trainingEndTimeHour"
 											indexed="true"
-											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeHour}">
+											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeHour}"
+											th:errorclass="errorInput">
 											<option th:each="hour: *{attendanceForm.hourMap}" th:value="*{hour.key}"
 												th:text="*{hour.value}"></option>
 										</select>
@@ -119,7 +122,8 @@
 										<select name class="form-control time-control"
 											errorstyleclass="form-control errorInput" property="trainingEndTimeMinute"
 											indexed="true"
-											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeMinute}">
+											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeMinute}"
+											th:errorclass="errorInput">
 											<option th:each="minute: *{attendanceForm.minuteMap}"
 												th:value="*{minute.key}" th:text="*{minute.value}"></option>
 										</select>

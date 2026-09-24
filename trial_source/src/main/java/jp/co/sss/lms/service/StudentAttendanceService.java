@@ -448,17 +448,27 @@ public class StudentAttendanceService {
 			}
 
 			// 出勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
-			if ((form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() == null) ||
-					(form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null)) {
-				result.rejectValue("attendanceList[" + i + "].trainingStartTime", "input.invalid",
-						new Object[] { "出勤時間" }, "{0}が正しく入力されていません。");
+			// 「分」未入力
+			if (form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() == null) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartTimeMinute", "input.invalid",
+						new Object[] { "出勤時間" }, null);
+
+				// 「時」未入力
+			} else if (form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null) {
+				result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour", "input.invalid",
+						new Object[] { "出勤時間" }, null);
 			}
 
 			// 退勤時間の「時」「分」の一方が入力あり、もう一方が入力なしの場合、エラーメッセージを追加
-			if ((form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() == null) ||
-					(form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null)) {
-				result.rejectValue("attendanceList[" + i + "].trainingEndTime", "input.invalid",
-						new Object[] { "退勤時間" }, "{0}が正しく入力されていません。");
+			// 「分」未入力
+			if (form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() == null) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndTimeMinute", "input.invalid",
+						new Object[] { "退勤時間" }, null);
+
+				// 「時」未入力
+			} else if (form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null) {
+				result.rejectValue("attendanceList[" + i + "].trainingEndTimeHour", "input.invalid",
+						new Object[] { "退勤時間" }, null);
 			}
 
 			// 出勤時間に入力なし、退勤時間に入力ありの場合、エラーメッセージを追加
