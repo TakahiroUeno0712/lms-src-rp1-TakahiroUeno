@@ -36,6 +36,7 @@
 						<tr>
 							<th class="w140">日付</th>
 							<th class="w140">コース内容</th>
+							<th class="w60"></th>
 							<th class="w180">出勤</th>
 							<th class="w180">退勤</th>
 							<th class="w80">中抜け時間</th>
@@ -62,6 +63,13 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
+								
+								<!-- 上野貴博 - Task.28 -->
+								<!-- 定時を反映させる定時ボタン -->
+								<td class="w60">
+									<input type="button" id="myButton" class="btn btn-success" value="定時" onclick="fillRowValues(this)">
+								</td>
+								
 								<td class="w70">
 
 									<!-- 上野貴博 - Task.26 -->
@@ -71,7 +79,7 @@
 										<!-- 出勤時間(時)
 											th:field:attendanceListの現在行のtrainingStartTimeHourと紐づけ
 											th:each:hourMapからプルダウンの選択肢を生成 -->
-										<select name class="form-control time-control"
+										<select name class="form-control time-control trainingStartTimeHour"
 											errorstyleclass="form-control errorInput" property="trainingStartTimeHour"
 											indexed="true"
 											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeHour}"
@@ -85,7 +93,7 @@
 										<!-- 出勤時間(分)
 											th:field:attendanceListの現在行のtrainingStartTimeMinuteと紐づけ
 											th:each:minuteMapからプルダウンの選択肢を生成 -->
-										<select name class="form-control time-control"
+										<select name class="form-control time-control trainingStartTimeMinute"
 											errorstyleclass="form-control errorInput" property="trainingStartTimeMinute"
 											indexed="true"
 											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingStartTimeMinute}"
@@ -105,7 +113,7 @@
 										<!-- 退勤時間(時)
 											th:field:attendanceListの現在行のtrainingEndTimeHourと紐づけ
 											th:each:hourMapからプルダウンの選択肢を生成 -->
-										<select name class="form-control time-control"
+										<select name class="form-control time-control trainingEndTimeHour"
 											errorstyleclass="form-control errorInput" property="trainingEndTimeHour"
 											indexed="true"
 											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeHour}"
@@ -119,7 +127,7 @@
 										<!-- 出勤時間(分)
 											th:field:attendanceListの現在行のtrainingEndTimeMinuteと紐づけ
 											th:each:minuteMapからプルダウンの選択肢を生成 -->
-										<select name class="form-control time-control"
+										<select name class="form-control time-control trainingEndTimeMinute"
 											errorstyleclass="form-control errorInput" property="trainingEndTimeMinute"
 											indexed="true"
 											th:field="*{attendanceForm.attendanceList[__${stat.index}__].trainingEndTimeMinute}"
@@ -161,6 +169,28 @@
 			</form>
 		</div>
 	</div>
+	
+	<!-- 上野貴博 - Task.28 -->
+	<!-- 定時ボタンが押下された行の出退勤時間に定時を設定する -->
+	<script>
+		function fillRowValues(button) {
+			
+			// 押下された定時ボタンが存在する行を取得
+			const row = button.closest('tr');
+			
+			// 対象行の出退勤時間のプルダウンをそれぞれ取得
+			const trainingStartTimeHour = row.querySelector('.trainingStartTimeHour');
+			const trainingStartTimeMinute = row.querySelector('.trainingStartTimeMinute');
+			const trainingEndTimeHour = row.querySelector('.trainingEndTimeHour');
+			const trainingEndTimeMinute = row.querySelector('.trainingEndTimeMinute');
+			
+			// 出退勤時間に定時を設定
+			if (trainingStartTimeHour) trainingStartTimeHour.value = '9';
+			if (trainingStartTimeMinute) trainingStartTimeMinute.value = '0';
+			if (trainingEndTimeHour) trainingEndTimeHour.value = '18';
+			if (trainingEndTimeMinute) trainingEndTimeMinute.value = '0';
+		}
+	</script>
 
 </body>
 
