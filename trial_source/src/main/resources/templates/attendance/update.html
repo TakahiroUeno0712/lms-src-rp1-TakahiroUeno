@@ -32,7 +32,10 @@
 
 			<form th:action="@{/attendance/update}" method="post">
 				<table class="table table-hover dataTable no-footer">
-					<thead>
+					
+					<!-- Task.29 - 上野貴博 -->
+					<!-- 一覧スクロール表示 -->
+					<thead style="display: block;">
 						<tr>
 							<th class="w140">日付</th>
 							<th class="w140">コース内容</th>
@@ -44,7 +47,10 @@
 							<th class="w140">備考</th>
 						</tr>
 					</thead>
-					<tbody>
+					
+					<!-- Task.29 - 上野貴博 -->
+					<!-- 一覧スクロール表示 -->
+					<tbody style="display: block; overflow-y: scroll; height: 560px;">
 						<th:block th:each="dailyAttendanceForm, stat : *{attendanceForm.attendanceList}">
 							<tr>
 								<th:block>
@@ -70,7 +76,7 @@
 									<input type="button" id="myButton" class="btn btn-success" value="定時" onclick="fillRowValues(this)">
 								</td>
 								
-								<td class="w70">
+								<td class="w180">
 
 									<!-- 上野貴博 - Task.26 -->
 									<!-- 出勤時刻を「時」「分」に分割しプルダウンへ変更 -->
@@ -104,7 +110,7 @@
 									</div>
 
 								</td>
-								<td class="w70">
+								<td class="w180">
 
 									<!-- 上野貴博 - Task.26 -->
 									<!-- 退勤時刻を「時」「分」に分割しプルダウンへ変更 -->
