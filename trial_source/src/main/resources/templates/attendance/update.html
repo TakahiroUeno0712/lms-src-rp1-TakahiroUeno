@@ -32,7 +32,7 @@
 
 			<form th:action="@{/attendance/update}" method="post">
 				<table class="table table-hover dataTable no-footer">
-					
+
 					<!-- Task.29 - 上野貴博 -->
 					<!-- 一覧スクロール表示 -->
 					<thead style="display: block;">
@@ -47,7 +47,7 @@
 							<th class="w140">備考</th>
 						</tr>
 					</thead>
-					
+
 					<!-- Task.29 - 上野貴博 -->
 					<!-- 一覧スクロール表示 -->
 					<tbody style="display: block; overflow-y: scroll; height: 560px;">
@@ -69,13 +69,14 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
-								
+
 								<!-- 上野貴博 - Task.28 -->
 								<!-- 定時を反映させる定時ボタン -->
 								<td class="w60">
-									<input type="button" id="myButton" class="btn btn-success" value="定時" onclick="fillRowValues(this)">
+									<input type="button" id="myButton" class="btn btn-success" value="定時"
+										onclick="fillRowValues(this)">
 								</td>
-								
+
 								<td class="w180">
 
 									<!-- 上野貴博 - Task.26 -->
@@ -108,8 +109,8 @@
 												th:value="*{minute.key}" th:text="*{minute.value}"></option>
 										</select>
 									</div>
-
 								</td>
+
 								<td class="w180">
 
 									<!-- 上野貴博 - Task.26 -->
@@ -142,8 +143,8 @@
 												th:value="*{minute.key}" th:text="*{minute.value}"></option>
 										</select>
 									</div>
-
 								</td>
+
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control">
 										<option th:each="blankTime : ${attendanceForm.blankTimes}"
@@ -175,21 +176,21 @@
 			</form>
 		</div>
 	</div>
-	
+
 	<!-- 上野貴博 - Task.28 -->
 	<!-- 定時ボタンが押下された行の出退勤時間に定時を設定する -->
 	<script>
 		function fillRowValues(button) {
-			
+
 			// 押下された定時ボタンが存在する行を取得
 			const row = button.closest('tr');
-			
+
 			// 対象行の出退勤時間のプルダウンをそれぞれ取得
 			const trainingStartTimeHour = row.querySelector('.trainingStartTimeHour');
 			const trainingStartTimeMinute = row.querySelector('.trainingStartTimeMinute');
 			const trainingEndTimeHour = row.querySelector('.trainingEndTimeHour');
 			const trainingEndTimeMinute = row.querySelector('.trainingEndTimeMinute');
-			
+
 			// 出退勤時間に定時を設定
 			if (trainingStartTimeHour) trainingStartTimeHour.value = '9';
 			if (trainingStartTimeMinute) trainingStartTimeMinute.value = '0';

@@ -403,7 +403,7 @@ public class StudentAttendanceService {
 			// 出勤の「時」「分」が共に入力されている場合、hh:mm形式に変換してセットする
 			if (form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() != null) {
 
-				// 時・分を2行になるように0埋め
+				// 時・分を2桁になるように0埋め
 				String trainingStartTimeHour = String.format("%02d", form.getTrainingStartTimeHour());
 				String trainingStartTimeMinute = String.format("%02d", form.getTrainingStartTimeMinute());
 
@@ -415,7 +415,7 @@ public class StudentAttendanceService {
 			// 退勤の「時」「分」が共に入力されている場合、hh:mm形式に変換してセットする
 			if (form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() != null) {
 
-				// 時・分を2行になるように0埋め
+				// 時・分を2桁になるように0埋め
 				String trainingEndTimeHour = String.format("%02d", form.getTrainingEndTimeHour());
 				String trainingEndTimeMinute = String.format("%02d", form.getTrainingEndTimeMinute());
 
@@ -453,7 +453,7 @@ public class StudentAttendanceService {
 				result.rejectValue("attendanceList[" + i + "].trainingStartTimeMinute", "input.invalid",
 						new Object[] { "出勤時間" }, null);
 
-				// 「時」未入力
+			// 「時」未入力
 			} else if (form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null) {
 				result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour", "input.invalid",
 						new Object[] { "出勤時間" }, null);
@@ -465,7 +465,7 @@ public class StudentAttendanceService {
 				result.rejectValue("attendanceList[" + i + "].trainingEndTimeMinute", "input.invalid",
 						new Object[] { "退勤時間" }, null);
 
-				// 「時」未入力
+			// 「時」未入力
 			} else if (form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null) {
 				result.rejectValue("attendanceList[" + i + "].trainingEndTimeHour", "input.invalid",
 						new Object[] { "退勤時間" }, null);
